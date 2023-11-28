@@ -1,35 +1,40 @@
 import chinguLogo from './assets/Chingu_Logo_small.png'
-import { randomBytes } from 'randombytes'
+import getRandomValues from './util/getRandomValues.js'
 import JSChaCha20 from './util/jschacha20.js'
 import './App.css'
 
 let randomNos = []
 
 const generateRandomNos = (numberToGenerate) => {
-  // Since crypto.randomBytes is only used in NodeJS rely instead on nanoid
-  const key = new Uint8Array(randomBytes(32))
-  const nonce = new Uint8Array(randomBytes(12))
-  const data = new Uint8Array(randomBytes(4096))
+  // Since crypto.randomBytes is only used in NodeJS call the BE to generate them
+  const key = getRandomValues(32)
+  console.log('generateRandomNos - key: ', key)
+  const nonce = getRandomValues(12)
+  const data = getRandomValues(4096)
 
   for (let i = 0; i < numberToGenerate; i++) {
+    console.log('generateRandomNos - i: ', i)
     const encoder = new JSChaCha20(key, nonce)
     const encr = encoder.encrypt(data)
 
     // Generate a random number in the range 0-100
-    const rn = parseInt(encr) % 101
+    const rn = parseInt(encr) % numberToGenerate
     randomNos.push(rn)
     console.log('rn: ', rn)
   }
 }
 
-const DisplayRandomNos = (randomNos) => {
-  return randomNos.map(randomNo =>
-    <li key={ randomNo }></li>
+const DisplayRandomNos = async (randomNos) => {
+  return (randomNos.length !== 0
+      ? (randomNos.map(randomNo => <li key={ randomNo }></li>))
+      : null
   )
 }
 
 const App = () => {
-  generateRandomNos(100)
+  console.log('starting app...')
+  generateRandomNos(1)
+  console.log('randomNos: ', randomNos)
   return (
     <>
       <div>
@@ -39,7 +44,9 @@ const App = () => {
       </div>
       <h1>Chingu Roundtable - Implementing & Evaluating a CSPRNG</h1>
       <div>
-        <DisplayRandomNos/>
+        <ol>
+          <DisplayRandomNos/>
+        </ol>
       </div>
     </>
   )
