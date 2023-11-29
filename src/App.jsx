@@ -1,8 +1,10 @@
+import './App.css'
 import chinguLogo from './assets/Chingu_Logo_small.png'
 import { useEffect, useState } from 'react'
 import getRandomValues from './util/getRandomValues.js'
 import JSChaCha20 from './util/jschacha20.js'
-import './App.css'
+import calculateStdDev from './util/calculateStdDev.js'
+
 import DisplayRandomNos from './components/DisplayRandomNos.jsx'
 
 const generateMathRandomNos = (numberToGenerate) => {
@@ -53,9 +55,11 @@ const generateCsprngNos = (numberToGenerate) => {
 export default function App() {
   const [triggerCsprng, setTriggerCsprng] = useState(false)
   const [csprngRandomNos, setCsprngRandomNos] = useState(null)
+  const [csprngRandomStdDev, setCsprngRandomStdDev] = useState(0)
 
   const [triggerMathRandom, setTriggerMathRandom] = useState(false)
   const [mathRandomNos, setMathRandomNos] = useState(null)
+  const [mathRandomStdDev, setMathRandomStdDev] = useState(0)
 
   useEffect(() => {
     // Generate the desired number of CSPRNG random numbers
@@ -64,6 +68,7 @@ export default function App() {
       .then((randomNos) => {
         setTriggerCsprng(false)
         setCsprngRandomNos(randomNos)
+        setCsprngRandomStdDev(calculateStdDev(randomNos))
         console.log('App - CSPRNG - randomNos.length: ', randomNos.length, ' randomNos: ', randomNos)
       })
     }
@@ -73,6 +78,7 @@ export default function App() {
       const randomNos = generateMathRandomNos(5)
       setTriggerMathRandom(false)
       setMathRandomNos(randomNos)
+      setMathRandomStdDev(calculateStdDev(randomNos))
       console.log('App - Math.random() - randomNos.length: ', randomNos.length, ' randomNos: ', randomNos)
     }
   }, [triggerCsprng, triggerMathRandom])
@@ -93,16 +99,22 @@ export default function App() {
         <ol>
           <DisplayRandomNos randomNos={ csprngRandomNos } />
         </ol>
+        <div>
+          <p>Standard Deviation: { csprngRandomStdDev }</p>
+        </div>
       </div>
 
       <div>
-      <button onClick={() => setTriggerMathRandom(true)}>
-        Generate Math.random() numbers
-      </button>
-      <ol>
-        <DisplayRandomNos randomNos={ mathRandomNos } />
-      </ol>
-    </div>
+        <button onClick={() => setTriggerMathRandom(true)}>
+          Generate Math.random() numbers
+        </button>
+        <ol>
+          <DisplayRandomNos randomNos={ mathRandomNos } />
+        </ol>
+        <div>
+          <p>Standard Deviation: { mathRandomStdDev }</p>
+        </div>
+      </div>
     </div>
   )
 }
