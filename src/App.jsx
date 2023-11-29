@@ -34,7 +34,7 @@ const generateRandomNos = (numberToGenerate) => {
   })
 }
 
-const App = () => {
+export default function App() {
   generateRandomNos(5)
   .then((randomNos) => {
     console.log('App - randomNos.length: ', randomNos.length, ' randomNos: ', randomNos)
@@ -48,12 +48,10 @@ const App = () => {
         <h1>Chingu Roundtable - Implementing & Evaluating a CSPRNG</h1>
         <div>
           <ol>
-            <DisplayRandomNos randomNos={ randomNos }/>
+            <DisplayRandomNos randomNos={ randomNos } />
           </ol>
         </div>
       </>
     )
   })
 }
-
-export default App
