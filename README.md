@@ -19,8 +19,10 @@ Javascripts `Math.random()` function?
 2. How can the randomness of a CSPRNG over other random number generators be
 evaluated?
 3. Is there a type of chart that would show the "randomness" of each solution?
-4. How would I write an app to do this?
-5. Are there any special issues that complicate the implementation?
+4. Are there an performance penalties for using a CSPRNG over a traditional
+PRNG?
+5. How would I write an app to do this?
+6. Are there any special issues that complicate the implementation?
 
 ## Technical Stack
 
