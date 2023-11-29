@@ -64,7 +64,6 @@
  * @constructor
  */
 const JSChaCha20 = function (key, nonce, counter) {
-  console.log('JSChaCha20 - key: ', key, ' key.length: ', key.length, ' typeof key: ', typeof key)
   if (typeof counter === 'undefined') {
     counter = 0
   }
