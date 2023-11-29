@@ -40,7 +40,14 @@ const generateCsprngNos = (numberToGenerate) => {
         const encoder = new JSChaCha20(key, nonce)
         const encr = encoder.encrypt(data)
     
-        // Generate a random number in the range 0-100
+        // Generate a random number in the range of values from 0 to the 
+        // maximum value of an unsigned 8-bit integer. This is automatic 
+        // for ChaCha20 since it produces an encrypted result that's an
+        // array of unsigned 8-bit integers.
+
+        // Note that our use of Math.random() to generate a "random" index
+        // into the array of encrypted data should be re-evaluated. This is
+        // because Math.random() uses a PRNG algorithm.
         const MAX = encr.length
         const MIN = 0
         const randomIndex = Math.floor(Math.random() * (MAX-MIN) + MIN)
