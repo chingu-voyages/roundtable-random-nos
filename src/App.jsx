@@ -6,22 +6,31 @@ import './App.css'
 let randomNos = []
 
 const generateRandomNos = (numberToGenerate) => {
-  // Since crypto.randomBytes is only used in NodeJS call the BE to generate them
-  const key = getRandomValues(32)
-  console.log('generateRandomNos - key: ', key)
-  const nonce = getRandomValues(12)
-  const data = getRandomValues(4096)
+  console.log('generateRandomNos entered...')
+  return new Promise((resolve, reject) => {
+    // Since crypto.randomBytes is only used in NodeJS call the BE to generate them
+    const keyPromise = getRandomValues(32)
+    const noncePromise = getRandomValues(12)
+    const dataPromise = getRandomValues(4096)
 
-  for (let i = 0; i < numberToGenerate; i++) {
-    console.log('generateRandomNos - i: ', i)
-    const encoder = new JSChaCha20(key, nonce)
-    const encr = encoder.encrypt(data)
-
-    // Generate a random number in the range 0-100
-    const rn = parseInt(encr) % numberToGenerate
-    randomNos.push(rn)
-    console.log('rn: ', rn)
-  }
+    Promise.all([keyPromise, noncePromise, dataPromise]).then((values) => {
+      const key = new Uint8Array(Object.values(values[0]))
+      const nonce = new Uint8Array(Object.values(values[1]))
+      const data = new Uint8Array(Object.values(values[2]))
+    
+      for (let i = 0; i < numberToGenerate; ++i) {
+        const encoder = new JSChaCha20(key, nonce)
+        const encr = encoder.encrypt(data)
+        console.log('generateRandomNos - encr: ', encr)
+    
+        // Generate a random number in the range 0-100
+        const rn = parseInt(encr) % encr.length
+        randomNos.push(rn)
+        console.log('rn: ', rn)
+      }
+      resolve("Done")
+    })
+  })
 }
 
 const DisplayRandomNos = async (randomNos) => {
@@ -34,22 +43,24 @@ const DisplayRandomNos = async (randomNos) => {
 const App = () => {
   console.log('starting app...')
   generateRandomNos(1)
-  console.log('randomNos: ', randomNos)
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={ chinguLogo } className="logo" alt="Vite logo" />
-        </a>
-      </div>
-      <h1>Chingu Roundtable - Implementing & Evaluating a CSPRNG</h1>
-      <div>
-        <ol>
-          <DisplayRandomNos/>
-        </ol>
-      </div>
-    </>
-  )
+  .then(() => {
+    console.log('randomNos: ', randomNos)
+    return (
+      <>
+        <div>
+          <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
+            <img src={ chinguLogo } className="logo" alt="Vite logo" />
+          </a>
+        </div>
+        <h1>Chingu Roundtable - Implementing & Evaluating a CSPRNG</h1>
+        <div>
+          <ol>
+            <DisplayRandomNos/>
+          </ol>
+        </div>
+      </>
+    )
+  })
 }
 
 export default App
