@@ -2,7 +2,7 @@ import chinguLogo from './assets/Chingu_Logo_small.png'
 import getRandomValues from './util/getRandomValues.js'
 import JSChaCha20 from './util/jschacha20.js'
 import './App.css'
-import { DisplayRandomNos } from './components/DisplayRandomNos.jsx'
+import DisplayRandomNos from './components/DisplayRandomNos.jsx'
 
 const generateRandomNos = (numberToGenerate) => {
   return new Promise((resolve) => {
@@ -39,7 +39,7 @@ export default function App() {
   .then((randomNos) => {
     console.log('App - randomNos.length: ', randomNos.length, ' randomNos: ', randomNos)
     return (
-      <>
+      <div>
         <div>
           <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
             <img src={ chinguLogo } className="logo" alt="Vite logo" />
@@ -51,7 +51,7 @@ export default function App() {
             <DisplayRandomNos randomNos={ randomNos } />
           </ol>
         </div>
-      </>
+      </div>
     )
   })
 }
