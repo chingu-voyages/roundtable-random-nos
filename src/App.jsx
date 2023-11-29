@@ -71,7 +71,7 @@ export default function App() {
   useEffect(() => {
     // Generate the desired number of CSPRNG random numbers
     if (triggerCsprng) {
-      generateCsprngNos(5)
+      generateCsprngNos(5) // TODO: Determine the number of numbers to generate based on user input
       .then((randomNos) => {
         setTriggerCsprng(false)
         setCsprngRandomNos(randomNos)
@@ -82,7 +82,7 @@ export default function App() {
 
     // Generate the desired number of Math.random() numbers
     if (triggerMathRandom) {
-      const randomNos = generateMathRandomNos(5)
+      const randomNos = generateMathRandomNos(5) / TODO: Determine the number of numbers to generate based on user input
       setTriggerMathRandom(false)
       setMathRandomNos(randomNos)
       setMathRandomStdDev(calculateStdDev(randomNos))
