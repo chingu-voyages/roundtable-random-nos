@@ -82,7 +82,7 @@ export default function App() {
 
     // Generate the desired number of Math.random() numbers
     if (triggerMathRandom) {
-      const randomNos = generateMathRandomNos(5) / TODO: Determine the number of numbers to generate based on user input
+      const randomNos = generateMathRandomNos(5) // TODO: Determine the number of numbers to generate based on user input
       setTriggerMathRandom(false)
       setMathRandomNos(randomNos)
       setMathRandomStdDev(calculateStdDev(randomNos))
