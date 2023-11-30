@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import getRandomValues from './util/getRandomValues.js'
 import JSChaCha20 from './util/jschacha20.js'
 import calculateStdDev from './util/calculateStdDev.js'
-
 import DisplayRandomNos from './components/DisplayRandomNos.jsx'
 
 const generateMathRandomNos = (numberToGenerate) => {
@@ -68,10 +67,12 @@ export default function App() {
   const [mathRandomNos, setMathRandomNos] = useState(null)
   const [mathRandomStdDev, setMathRandomStdDev] = useState(0)
 
+  const noToGenerate = 100
+
   useEffect(() => {
     // Generate the desired number of CSPRNG random numbers
     if (triggerCsprng) {
-      generateCsprngNos(5) // TODO: Determine the number of numbers to generate based on user input
+      generateCsprngNos(noToGenerate) // TODO: Determine the number of numbers to generate based on user input
       .then((randomNos) => {
         setTriggerCsprng(false)
         setCsprngRandomNos(randomNos)
@@ -82,7 +83,7 @@ export default function App() {
 
     // Generate the desired number of Math.random() numbers
     if (triggerMathRandom) {
-      const randomNos = generateMathRandomNos(5) // TODO: Determine the number of numbers to generate based on user input
+      const randomNos = generateMathRandomNos(noToGenerate) // TODO: Determine the number of numbers to generate based on user input
       setTriggerMathRandom(false)
       setMathRandomNos(randomNos)
       setMathRandomStdDev(calculateStdDev(randomNos))
@@ -100,28 +101,31 @@ export default function App() {
       <h1>Chingu Roundtable - Implementing & Evaluating a CSPRNG</h1>
 
       <div>
-        <button onClick={() => setTriggerCsprng(true)}>
-          Generate CSPRNG random numbers
-        </button>
-        <ol>
-          <DisplayRandomNos randomNos={ csprngRandomNos } />
-        </ol>
-        <div>
-          <p>Standard Deviation: { csprngRandomStdDev }</p>
+        <div className="left">
+          <button onClick={() => setTriggerCsprng(true)}>
+            Generate using CSPRNG
+          </button>
+          <div>
+            <p>Standard Deviation: { csprngRandomStdDev }</p>
+          </div>
+          <ol>
+            <DisplayRandomNos randomNos={ csprngRandomNos } />
+          </ol>
         </div>
+
+        <span className="right">
+          <button onClick={() => setTriggerMathRandom(true)}>
+            Generate using Math.random()
+          </button>
+          <div>
+            <p>Standard Deviation: { mathRandomStdDev }</p>
+          </div>
+          <ol>
+            <DisplayRandomNos randomNos={ mathRandomNos } />
+          </ol>
+        </span>
       </div>
 
-      <div>
-        <button onClick={() => setTriggerMathRandom(true)}>
-          Generate Math.random() numbers
-        </button>
-        <ol>
-          <DisplayRandomNos randomNos={ mathRandomNos } />
-        </ol>
-        <div>
-          <p>Standard Deviation: { mathRandomStdDev }</p>
-        </div>
-      </div>
     </div>
   )
 }
