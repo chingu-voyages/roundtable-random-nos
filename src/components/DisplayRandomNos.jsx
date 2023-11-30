@@ -1,5 +1,5 @@
 const DisplayRandomNos = ({ randomNos }) => {
-  return randomNos !== null 
+  return randomNos !== null && randomNos != []
     ? ( 
         randomNos.map(randomNo => 
           <li key={ randomNo }>

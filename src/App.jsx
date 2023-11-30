@@ -59,6 +59,7 @@ const generateCsprngNos = (numberToGenerate) => {
 }
 
 export default function App() {
+  const [noToGenerate, setNoToGenerate] = useState(0);
   const [triggerCsprng, setTriggerCsprng] = useState(false)
   const [csprngRandomNos, setCsprngRandomNos] = useState(null)
   const [csprngRandomStdDev, setCsprngRandomStdDev] = useState(0)
@@ -67,11 +68,12 @@ export default function App() {
   const [mathRandomNos, setMathRandomNos] = useState(null)
   const [mathRandomStdDev, setMathRandomStdDev] = useState(0)
 
-  const noToGenerate = 100
+  //const noToGenerate = 100
 
   useEffect(() => {
     // Generate the desired number of CSPRNG random numbers
     if (triggerCsprng) {
+      setCsprngRandomNos(0)
       generateCsprngNos(noToGenerate) // TODO: Determine the number of numbers to generate based on user input
       .then((randomNos) => {
         setTriggerCsprng(false)
@@ -89,7 +91,7 @@ export default function App() {
       setMathRandomStdDev(calculateStdDev(randomNos))
       console.log('App - Math.random() - randomNos.length: ', randomNos.length, ' randomNos: ', randomNos)
     }
-  }, [triggerCsprng, triggerMathRandom])
+  }, [noToGenerate, triggerCsprng, triggerMathRandom])
   
   return (
     <div>
@@ -99,6 +101,13 @@ export default function App() {
         </a>
       </div>
       <h1>Chingu Roundtable - Implementing & Evaluating a CSPRNG</h1>
+
+      <div>
+        <label htmlFor="notogenerate">Numbers to generate: </label>
+        <input type="number" id="notogenerate" name="notogenerate" required minLength="1" maxLength="5" 
+        value={ noToGenerate } // ...force the input's value to match the state variable...
+        onChange={event => setNoToGenerate(event.target.value)}/>
+      </div>
 
       <div>
         <div className="left">
