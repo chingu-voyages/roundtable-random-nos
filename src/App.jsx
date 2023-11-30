@@ -1,62 +1,10 @@
 import './App.css'
 import chinguLogo from './assets/Chingu_Logo_small.png'
 import { useEffect, useState } from 'react'
-import getRandomValues from './util/getRandomValues.js'
-import JSChaCha20 from './util/jschacha20.js'
+import generateCsprngNos from './util/generateCsprngNos.js'
+import generateMathRandomNos from './util/generateMathRandomNos.js'
 import calculateStdDev from './util/calculateStdDev.js'
 import DisplayRandomNos from './components/DisplayRandomNos.jsx'
-
-const generateMathRandomNos = (numberToGenerate) => {
-  let randomNos = []
-    
-  console.log('generateRandomNos - numberToGenerate: ', numberToGenerate)
-  for (let i = 0; i < numberToGenerate; ++i) {
-    // Generate a random number in the range 0-100
-    const MAX = 256
-    const MIN = 0
-    const rn = Math.floor(Math.random() * (MAX-MIN) + MIN)
-    randomNos.push(rn)
-  }
-  return randomNos
-}
-
-const generateCsprngNos = (numberToGenerate) => {
-  return new Promise((resolve) => {
-    // Since crypto.randomBytes is only used in NodeJS call the BE to generate them
-    const keyPromise = getRandomValues(32)
-    const noncePromise = getRandomValues(12)
-    const dataPromise = getRandomValues(4096)
-
-    Promise.all([keyPromise, noncePromise, dataPromise]).then((values) => {
-      const key = new Uint8Array(Object.values(values[0]))
-      const nonce = new Uint8Array(Object.values(values[1]))
-      const data = new Uint8Array(Object.values(values[2]))
-
-      let randomNos = []
-    
-      console.log('generateCsprngRandomNos - numberToGenerate: ', numberToGenerate)
-      for (let i = 0; i < numberToGenerate; ++i) {
-        const encoder = new JSChaCha20(key, nonce)
-        const encr = encoder.encrypt(data)
-    
-        // Generate a random number in the range of values from 0 to the 
-        // maximum value of an unsigned 8-bit integer. This is automatic 
-        // for ChaCha20 since it produces an encrypted result that's an
-        // array of unsigned 8-bit integers.
-
-        // Note that our use of Math.random() to generate a "random" index
-        // into the array of encrypted data should be re-evaluated. This is
-        // because Math.random() uses a PRNG algorithm.
-        const MAX = encr.length
-        const MIN = 0
-        const randomIndex = Math.floor(Math.random() * (MAX-MIN) + MIN)
-        const rn = encr[randomIndex]
-        randomNos.push(rn)
-      }
-      resolve(randomNos)
-    })
-  })
-}
 
 export default function App() {
   const [noToGenerate, setNoToGenerate] = useState(0);
