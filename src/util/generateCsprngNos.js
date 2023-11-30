@@ -15,7 +15,6 @@ const generateCsprngNos = (numberToGenerate) => {
 
       let randomNos = []
     
-      console.log('generateCsprngRandomNos - numberToGenerate: ', numberToGenerate)
       for (let i = 0; i < numberToGenerate; ++i) {
         const encoder = new JSChaCha20(key, nonce)
         const encr = encoder.encrypt(data)

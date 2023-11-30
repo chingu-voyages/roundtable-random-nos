@@ -1,22 +1,25 @@
 import './App.css'
 import chinguLogo from './assets/Chingu_Logo_small.png'
 import { useEffect, useState } from 'react'
-import generateCsprngNos from './util/generateCsprngNos.js'
-import generateMathRandomNos from './util/generateMathRandomNos.js'
+import calculateShannonEntropy from './util/calculateShannonEntropy.js'
 import calculateStdDev from './util/calculateStdDev.js'
 import DisplayRandomNos from './components/DisplayRandomNos.jsx'
+import generateCsprngNos from './util/generateCsprngNos.js'
+import generateMathRandomNos from './util/generateMathRandomNos.js'
 
 export default function App() {
-  const [noToGenerate, setNoToGenerate] = useState(0);
+  const [noToGenerate, setNoToGenerate] = useState(0)
+
   const [triggerCsprng, setTriggerCsprng] = useState(false)
   const [csprngRandomNos, setCsprngRandomNos] = useState(null)
   const [csprngRandomStdDev, setCsprngRandomStdDev] = useState(0)
+  const [csprngRandomEntropy, setCsprngRandomEntropy] = useState(0)
 
   const [triggerMathRandom, setTriggerMathRandom] = useState(false)
   const [mathRandomNos, setMathRandomNos] = useState(null)
   const [mathRandomStdDev, setMathRandomStdDev] = useState(0)
+  const [mathRandomEntropy, setMathRandomEntropy] = useState(0)
 
-  //const noToGenerate = 100
 
   useEffect(() => {
     // Generate the desired number of CSPRNG random numbers
@@ -27,7 +30,7 @@ export default function App() {
         setTriggerCsprng(false)
         setCsprngRandomNos(randomNos)
         setCsprngRandomStdDev(calculateStdDev(randomNos))
-        console.log('App - CSPRNG - randomNos.length: ', randomNos.length, ' randomNos: ', randomNos)
+        setCsprngRandomEntropy(calculateShannonEntropy(randomNos))
       })
     }
 
@@ -37,7 +40,7 @@ export default function App() {
       setTriggerMathRandom(false)
       setMathRandomNos(randomNos)
       setMathRandomStdDev(calculateStdDev(randomNos))
-      console.log('App - Math.random() - randomNos.length: ', randomNos.length, ' randomNos: ', randomNos)
+      setMathRandomEntropy(calculateShannonEntropy(randomNos))
     }
   }, [noToGenerate, triggerCsprng, triggerMathRandom])
   
@@ -64,6 +67,7 @@ export default function App() {
           </button>
           <div>
             <p>Standard Deviation: { csprngRandomStdDev }</p>
+            <p>Shannon Entropy: { csprngRandomEntropy }</p>
           </div>
           <ol>
             <DisplayRandomNos randomNos={ csprngRandomNos } />
@@ -76,6 +80,7 @@ export default function App() {
           </button>
           <div>
             <p>Standard Deviation: { mathRandomStdDev }</p>
+            <p>Shannon Entropy: { mathRandomEntropy }</p>
           </div>
           <ol>
             <DisplayRandomNos randomNos={ mathRandomNos } />
