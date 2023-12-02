@@ -1,8 +1,8 @@
 const DisplayRandomNos = ({ randomNos }) => {
   return randomNos !== null && randomNos != []
     ? ( 
-        randomNos.map(randomNo => 
-          <li key={ randomNo }>
+        randomNos.map((randomNo, index) => 
+          <li key={ `${index}-${randomNo}` }>
             { randomNo }
           </li>
         )

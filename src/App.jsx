@@ -20,15 +20,16 @@ export default function App() {
   const [mathRandomStdDev, setMathRandomStdDev] = useState(0)
   const [mathRandomEntropy, setMathRandomEntropy] = useState(0)
 
-
   useEffect(() => {
     // Generate the desired number of CSPRNG random numbers
     if (triggerCsprng) {
       setCsprngRandomNos(0)
-      generateCsprngNos(noToGenerate) // TODO: Determine the number of numbers to generate based on user input
+      generateCsprngNos(noToGenerate) 
       .then((randomNos) => {
         setTriggerCsprng(false)
+        console.time('Generating CSPRNG numbers took...')
         setCsprngRandomNos(randomNos)
+        console.timeLog('Generating CSPRNG numbers took...')
         setCsprngRandomStdDev(calculateStdDev(randomNos))
         setCsprngRandomEntropy(calculateShannonEntropy(randomNos))
       })
@@ -36,9 +37,11 @@ export default function App() {
 
     // Generate the desired number of Math.random() numbers
     if (triggerMathRandom) {
-      const randomNos = generateMathRandomNos(noToGenerate) // TODO: Determine the number of numbers to generate based on user input
+      const randomNos = generateMathRandomNos(noToGenerate) 
       setTriggerMathRandom(false)
+      console.time('Generating Math.random() numbers took...')
       setMathRandomNos(randomNos)
+      console.timeLog('Generating Math.random() numbers took...')
       setMathRandomStdDev(calculateStdDev(randomNos))
       setMathRandomEntropy(calculateShannonEntropy(randomNos))
     }
@@ -56,8 +59,8 @@ export default function App() {
       <div>
         <label htmlFor="notogenerate">Numbers to generate: </label>
         <input type="number" id="notogenerate" name="notogenerate" required minLength="1" maxLength="5" 
-        value={ noToGenerate } // ...force the input's value to match the state variable...
-        onChange={event => setNoToGenerate(event.target.value)}/>
+          value={ noToGenerate } // ...force the input's value to match the state variable...
+          onChange={event => setNoToGenerate(event.target.value)}/>
       </div>
 
       <div>
